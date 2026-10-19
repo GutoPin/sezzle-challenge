@@ -199,3 +199,93 @@ describe('calculatorReducer', () => {
     expect(state).toMatchObject({ entry: '0.5', fresh: true, stored: 2, operator: 'add' })
   })
 })
+
+describe('calculatorReducer under hostile input', () => {
+  it.each<[string, CalculatorAction[], Partial<CalculatorState>]>([
+    ['repeated equals after a result', [...type('2'), add, ...type('2'), equals], {}],
+    ['a run of decimal points', type('1....5'), { entry: '1.5' }],
+    ['an operator as the very first key', [add, ...type('3')], { stored: 0, entry: '3' }],
+    ['± on zero, then digits', [{ type: 'toggleSign' }, ...type('7')], { entry: '-7' }],
+    [
+      'backspace past the sign',
+      [...type('5'), { type: 'toggleSign' }, { type: 'backspace' }, { type: 'backspace' }],
+      { entry: '0' },
+    ],
+    [
+      'backspace right after an operator',
+      [...type('5'), add, { type: 'backspace' }],
+      { entry: '0', operator: 'add' },
+    ],
+    [
+      '√ right after an operator',
+      [...type('9'), add, { type: 'sqrt' }],
+      { stored: 9, operator: 'add' },
+    ],
+  ])('%s', (_, actions, expected) => {
+    expect(run(actions)).toMatchObject(expected)
+  })
+
+  it('keeps editing sane after a result in scientific notation', () => {
+    const big = answer(
+      run([...type('9'), { type: 'operator', operator: 'power' }, ...type('99'), equals]),
+      1e94,
+    )
+    expect(big.entry).toBe('1e+94')
+
+    expect(calculatorReducer(big, { type: 'toggleSign' }).entry).toBe('-1e+94')
+    expect(calculatorReducer(big, { type: 'backspace' }).entry).toBe('0')
+    expect(calculatorReducer(big, { type: 'decimal' }).entry).toBe('0.')
+    expect(calculatorReducer(big, multiply)).toMatchObject({ stored: 1e94, operator: 'multiply' })
+  })
+
+  it('never reaches an invalid state, whatever is pressed', () => {
+    // A small seeded generator, so a failure always reproduces.
+    let seed = 20261019
+    const random = () => {
+      seed = (seed * 1103515245 + 12345) % 2 ** 31
+      return seed / 2 ** 31
+    }
+    const pick = <T>(items: readonly T[]): T => items[Math.floor(random() * items.length)] as T
+
+    const inputs: CalculatorAction[] = [
+      ...type('0123456789'),
+      { type: 'decimal' },
+      { type: 'toggleSign' },
+      { type: 'backspace' },
+      { type: 'clear' },
+      { type: 'equals' },
+      { type: 'sqrt' },
+      { type: 'retry' },
+      { type: 'recall', value: -0.5 },
+      ...(['add', 'subtract', 'multiply', 'divide', 'power', 'percentage'] as const).map(
+        (operator): CalculatorAction => ({ type: 'operator', operator }),
+      ),
+    ]
+
+    let state = initialState
+    for (let step = 0; step < 20_000; step++) {
+      state = calculatorReducer(state, pick(inputs))
+
+      if (state.request) {
+        // Answer like the API would: sometimes a number, sometimes an error.
+        const { id } = state.request
+        state = calculatorReducer(
+          state,
+          random() < 0.8
+            ? { type: 'resolved', id, result: (random() - 0.5) * 10 ** Math.floor(random() * 20) }
+            : {
+                type: 'failed',
+                id,
+                code: pick(['division_by_zero', 'network', 'timeout'] as const),
+              },
+        )
+      }
+
+      expect(Number.isFinite(Number(state.entry)), state.entry).toBe(true)
+      if (!state.fresh)
+        expect(state.entry.replace(/\D/g, '').length).toBeLessThanOrEqual(MAX_DIGITS)
+      expect(state.request).toBeNull()
+      if (state.operator) expect(state.stored).not.toBeNull()
+    }
+  })
+})
