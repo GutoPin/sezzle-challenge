@@ -21,7 +21,7 @@ function Shell() {
       </a>
       {/* Below about 350px the controls wrap under the wordmark instead of scrolling sideways. */}
       <header className="flex flex-wrap items-center justify-between gap-2 py-4 sm:gap-x-3">
-        <a href="/" className="rounded-sm">
+        <a href="/" className="tap-target rounded-sm">
           <Wordmark />
         </a>
         <div className="ml-auto flex items-center gap-1.5 sm:gap-3">
