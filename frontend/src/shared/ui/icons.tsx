@@ -47,6 +47,24 @@ export function BookIcon(props: IconProps) {
   )
 }
 
+export function BackspaceIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M5.5 3.5h8a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-8L1.5 8l4-4.5Z" />
+      <path d="m8 6 4 4m0-4-4 4" />
+    </Icon>
+  )
+}
+
+export function RetryIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M13.5 8a5.5 5.5 0 1 1-1.6-3.9" />
+      <path d="M13.5 2.5v3h-3" />
+    </Icon>
+  )
+}
+
 export function MonitorIcon(props: IconProps) {
   return (
     <Icon {...props}>
