@@ -13,6 +13,12 @@ function Shell() {
 
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col px-4 sm:px-8">
+      <a
+        href="#main"
+        className="sr-only rounded-full bg-ink text-sm font-medium text-canvas focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-10 focus:px-4 focus:py-2"
+      >
+        {t('header.skipToMain')}
+      </a>
       {/* Below about 350px the controls wrap under the wordmark instead of scrolling sideways. */}
       <header className="flex flex-wrap items-center justify-between gap-2 py-4 sm:gap-x-3">
         <a href="/" className="rounded-sm">
@@ -31,7 +37,7 @@ function Shell() {
         </div>
       </header>
 
-      <main className="flex-1 pt-6 pb-16 sm:pt-10">
+      <main id="main" className="flex-1 pt-6 pb-16 sm:pt-10">
         <CalculatorWorkspace
           intro={
             <>

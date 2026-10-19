@@ -11,7 +11,8 @@
       "dark": "Dark theme",
       "system": "Match system theme"
     },
-    "apiDocs": "API docs"
+    "apiDocs": "API docs",
+    "skipToMain": "Skip to main content"
   },
   "calculator": {
     "label": "Calculator",

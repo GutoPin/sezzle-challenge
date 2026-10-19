@@ -31,6 +31,18 @@ describe('App', () => {
     ).toBeInTheDocument()
   })
 
+  it('lets keyboard users skip the header', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.tab()
+
+    const skip = screen.getByRole('link', { name: 'Skip to main content' })
+    expect(skip).toHaveFocus()
+    expect(skip).toHaveAttribute('href', '#main')
+    expect(screen.getByRole('main')).toHaveAttribute('id', 'main')
+  })
+
   it('translates the shell when the language changes', async () => {
     const user = userEvent.setup()
     render(<App />)

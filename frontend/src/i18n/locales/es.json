@@ -11,7 +11,8 @@
       "dark": "Tema oscuro",
       "system": "Usar el tema del sistema"
     },
-    "apiDocs": "Documentación de la API"
+    "apiDocs": "Documentación de la API",
+    "skipToMain": "Ir al contenido principal"
   },
   "calculator": {
     "label": "Calculadora",
