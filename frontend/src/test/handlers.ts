@@ -69,9 +69,12 @@ export const handlers = [
     }
 
     const result = spec.evaluate(operands)
+    if (Number.isNaN(result)) {
+      return apiError(422, 'undefined_result', 'result is not a real number')
+    }
     if (!Number.isFinite(result)) {
       return apiError(422, 'result_out_of_range', 'result is out of range')
     }
-    return HttpResponse.json({ operation: name, operands, result })
+    return HttpResponse.json({ operation: name, operands, result: Number(result.toPrecision(15)) })
   }),
 ]

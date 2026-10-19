@@ -3,13 +3,18 @@ export const DEFAULT_TIMEOUT_MS = 8_000
 /** Codes the API sends in its error envelope. */
 export const SERVER_ERROR_CODES = [
   'invalid_json',
-  'invalid_operand_count',
   'unknown_field',
+  'invalid_operand_count',
+  'invalid_operand',
   'unknown_operation',
+  'not_found',
+  'method_not_allowed',
   'payload_too_large',
   'division_by_zero',
   'negative_square_root',
+  'undefined_result',
   'result_out_of_range',
+  'internal_error',
 ] as const
 
 /** Codes raised on this side when no usable response arrives. */

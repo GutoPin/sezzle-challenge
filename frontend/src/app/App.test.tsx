@@ -11,7 +11,7 @@ describe('App', () => {
     await act(() => i18n.changeLanguage('en'))
   })
 
-  it('renders the page landmarks', () => {
+  it('renders the page landmarks', async () => {
     render(<App />)
 
     const header = screen.getByRole('banner')
@@ -20,10 +20,15 @@ describe('App', () => {
     expect(within(header).getByRole('group', { name: 'Language' })).toBeInTheDocument()
     expect(within(header).getByRole('group', { name: 'Theme' })).toBeInTheDocument()
 
-    expect(screen.getByRole('main')).toContainElement(
-      screen.getByRole('heading', { level: 1, name: 'Quotient' }),
+    const main = screen.getByRole('main')
+    expect(main).toContainElement(
+      screen.getByRole('heading', { level: 1, name: 'Arithmetic, worked out.' }),
     )
+    expect(within(main).getByRole('region', { name: 'Calculator' })).toBeInTheDocument()
     expect(screen.getByRole('contentinfo')).toHaveTextContent('Arithmetic, worked out by a Go API.')
+    expect(
+      await within(screen.getByRole('contentinfo')).findByText('API online'),
+    ).toBeInTheDocument()
   })
 
   it('translates the shell when the language changes', async () => {

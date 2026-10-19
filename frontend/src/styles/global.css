@@ -36,9 +36,9 @@
   --font-sans: 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'Martian Mono Variable', ui-monospace, monospace;
 
-  --text-display: clamp(2.5rem, 1.6rem + 4vw, 4rem);
-  --text-display--line-height: 1;
-  --text-display--letter-spacing: -0.03em;
+  --text-display: clamp(1.875rem, 1.5rem + 1.25vw, 2.5rem);
+  --text-display--line-height: 1.08;
+  --text-display--letter-spacing: -0.025em;
 
   --radius-xs: var(--q-radius-xs);
   --radius-sm: var(--q-radius-sm);
@@ -86,4 +86,16 @@
       scroll-behavior: auto !important;
     }
   }
+}
+
+/*
+ * The history panel is printed on adding-machine tape: a torn, zig-zag top
+ * edge where the last strip was ripped off.
+ */
+@utility tape {
+  --tooth: 12px;
+  mask:
+    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / var(--tooth)
+      calc(var(--tooth) / 2) repeat-x,
+    linear-gradient(#000 0 0) 0 calc(var(--tooth) / 2) / 100% 100% no-repeat;
 }
