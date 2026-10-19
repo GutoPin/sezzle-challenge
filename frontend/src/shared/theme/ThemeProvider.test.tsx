@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 
 import { mockColorScheme } from '@/test/matchMedia'
 
+import { THEME_COLORS } from './ThemeContext'
 import { THEME_STORAGE_KEY, ThemeProvider } from './ThemeProvider'
 import { useTheme } from './useTheme'
 
@@ -83,6 +84,27 @@ describe('ThemeProvider', () => {
 
     expect(result.current.theme).toBe('system')
     expect(result.current.resolvedTheme).toBe('light')
+  })
+
+  it('paints the browser chrome in the chosen theme', () => {
+    mockColorScheme('light')
+    const metas = (['light', 'dark'] as const).map((scheme) => {
+      const meta = document.createElement('meta')
+      meta.name = 'theme-color'
+      meta.media = `(prefers-color-scheme: ${scheme})`
+      document.head.append(meta)
+      return meta
+    })
+    const { result } = renderTheme()
+
+    act(() => {
+      result.current.setTheme('dark')
+    })
+
+    for (const meta of metas) {
+      expect(meta.content).toBe(THEME_COLORS.dark)
+      meta.remove()
+    }
   })
 
   it('stops listening to the system on unmount', () => {
