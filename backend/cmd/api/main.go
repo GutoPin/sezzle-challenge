@@ -8,6 +8,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"log/slog"
 	"net"
 	"net/http"
@@ -24,31 +25,38 @@ import (
 )
 
 func main() {
-	cfg, err := config.Load(os.Getenv)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "invalid configuration:\n%v\n", err)
-		os.Exit(2)
-	}
-
-	if len(os.Args) > 1 && os.Args[1] == "healthcheck" {
-		if err := healthcheck(cfg.Port); err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			os.Exit(1)
-		}
-		return
-	}
-
-	logger := newLogger(cfg)
-	if err := run(cfg, logger); err != nil {
-		logger.Error("server stopped", slog.Any("error", err))
-		os.Exit(1)
-	}
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	code := run(ctx, os.Args[1:], os.Getenv, os.Stdout, os.Stderr)
+	stop()
+	os.Exit(code)
 }
 
-func run(cfg config.Config, logger *slog.Logger) error {
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-	defer stop()
+// run is main with its dependencies passed in, so it can be tested. It
+// returns the process exit code.
+func run(ctx context.Context, args []string, getenv func(string) string, stdout, stderr io.Writer) int {
+	cfg, err := config.Load(getenv)
+	if err != nil {
+		_, _ = fmt.Fprintf(stderr, "invalid configuration:\n%v\n", err)
+		return 2
+	}
 
+	if len(args) > 0 && args[0] == "healthcheck" {
+		if err := healthcheck(ctx, cfg.Port); err != nil {
+			_, _ = fmt.Fprintln(stderr, err)
+			return 1
+		}
+		return 0
+	}
+
+	logger := newLogger(cfg, stdout)
+	if err := serve(ctx, cfg, logger); err != nil {
+		logger.Error("server stopped", slog.Any("error", err))
+		return 1
+	}
+	return 0
+}
+
+func serve(ctx context.Context, cfg config.Config, logger *slog.Logger) error {
 	router := httpapi.NewRouter(calculator.Calculator{}, httpapi.Options{
 		Logger:         logger,
 		AllowedOrigins: cfg.AllowedOrigins,
@@ -69,16 +77,16 @@ func run(cfg config.Config, logger *slog.Logger) error {
 	return server.Serve(ctx, ln, router, logger) //nolint:wrapcheck // already wrapped with context
 }
 
-func newLogger(cfg config.Config) *slog.Logger {
+func newLogger(cfg config.Config, w io.Writer) *slog.Logger {
 	opts := &slog.HandlerOptions{Level: cfg.LogLevel}
 	if cfg.LogJSON {
-		return slog.New(slog.NewJSONHandler(os.Stdout, opts))
+		return slog.New(slog.NewJSONHandler(w, opts))
 	}
-	return slog.New(slog.NewTextHandler(os.Stdout, opts))
+	return slog.New(slog.NewTextHandler(w, opts))
 }
 
-func healthcheck(port int) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+func healthcheck(ctx context.Context, port int) error {
+	ctx, cancel := context.WithTimeout(ctx, 2*time.Second)
 	defer cancel()
 
 	url := fmt.Sprintf("http://127.0.0.1:%d/api/v1/health", port)
