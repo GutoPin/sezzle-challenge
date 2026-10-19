@@ -1,0 +1,29 @@
+# Local AI tooling (documented in PROMPTS.md instead)
+.claude/
+.agents/
+agent/
+skills-lock.json
+CLAUDE.md
+
+# Go
+backend/bin/
+backend/coverage.out
+backend/coverage.html
+
+# Frontend
+node_modules/
+frontend/dist/
+frontend/coverage/
+*.tsbuildinfo
+
+# Env & logs
+.env
+.env.*
+!.env.example
+*.log
+
+# Editors & OS
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
