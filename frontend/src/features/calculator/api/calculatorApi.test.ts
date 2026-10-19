@@ -49,6 +49,17 @@ describe('calculatorApi', () => {
     expect(error).toMatchObject({ code: 'division_by_zero', status: 422 })
   })
 
+  it.each([
+    ['an empty object', {}],
+    ['null', null],
+    ['a string result', { result: '42' }],
+    ['a null result', { result: null }],
+  ])('rejects a 200 response carrying %s', async (_, body) => {
+    server.use(http.post('/api/v1/operations/:operation', () => HttpResponse.json(body)))
+
+    await expect(calculate('add', [1, 2])).rejects.toMatchObject({ code: 'unknown' })
+  })
+
   it('forwards the abort signal', async () => {
     await expect(getHealth({ signal: AbortSignal.abort() })).rejects.toMatchObject({
       name: 'AbortError',

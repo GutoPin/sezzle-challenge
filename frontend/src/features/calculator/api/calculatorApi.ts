@@ -1,4 +1,4 @@
-import { request, type RequestOptions } from '@/shared/api/httpClient'
+import { ApiError, request, type RequestOptions } from '@/shared/api/httpClient'
 
 export const OPERATIONS = [
   'add',
@@ -54,14 +54,19 @@ export async function listOperations(options?: CallOptions): Promise<OperationIn
   return operations
 }
 
-export function calculate<Op extends Operation>(
+export async function calculate<Op extends Operation>(
   operation: Op,
   operands: Operands<Op>,
   options?: CallOptions,
 ): Promise<CalculationResult> {
-  return request<CalculationResult>(`${BASE_PATH}/operations/${operation}`, {
-    ...options,
-    method: 'POST',
-    body: { operands },
-  })
+  const response = await request<Partial<CalculationResult> | null>(
+    `${BASE_PATH}/operations/${operation}`,
+    { ...options, method: 'POST', body: { operands } },
+  )
+  // A proxy or a mismatched server can answer 200 with something else; never
+  // let that reach the display as "undefined" or "NaN".
+  if (typeof response?.result !== 'number' || !Number.isFinite(response.result)) {
+    throw new ApiError('unknown', 200, 'Response has no numeric result')
+  }
+  return { operation, operands, result: response.result }
 }
