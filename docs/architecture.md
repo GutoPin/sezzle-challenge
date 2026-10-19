@@ -57,7 +57,9 @@ path is tested.
    404 rather than falling through to the SPA.
 3. **Decoding.** The body is capped at 1 KiB, unknown fields and trailing
    data are rejected, and decoding failures map to `invalid_json`,
-   `unknown_field` or `payload_too_large`.
+   `unknown_field` or `payload_too_large`. Operands decode as pointers,
+   because `encoding/json` would otherwise turn `null` into `0`; a null
+   operand is `invalid_operand`.
 4. **Domain.** `Calculate` checks the operation exists and has the right
    number of finite operands, applies it, turns NaN into `ErrUndefinedResult`
    and ±Inf into `ErrResultOutOfRange`, and rounds to 15 significant digits.

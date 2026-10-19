@@ -41,6 +41,18 @@ The challenge statement was saved as the agent's project instructions. Then:
 
 > i think my conection go bad, continue the task
 
+> que es eso de scalar, como la api docs?
+
+> que mas tiene la app, se que el enunciado es corto y asi pero nada mas se deberia hacer? y que esta haciendo el otro agente?
+
+> no esos extras no, verifica que no uedan romper la calculadora, asi como dividir entre 0 o asi, lo intentaran romper fijo
+
+The last one led to a hardening pass: about 50 hostile requests against the
+API with curl, 5,000 concurrent mixed requests (no 500s, no dropped
+connections), and the real app driven in headless Chrome with hostile key
+sequences. It found two bugs, both fixed with tests: `null` operands were
+read as `0`, and a malformed 200 response could have shown `undefined`.
+
 ## How the work was done
 
 The agent wrote a phased plan, which I approved before any code was written.
@@ -57,6 +69,7 @@ so `git log --graph` shows the phases.
 | UI and accessibility pass | `feat/ui-polish`          | sub-agent, run in parallel with Docker and CI |
 | Docker and CI            | `chore/docker-ci`          | main agent                    |
 | Documentation            | `docs/readme`              | main agent                    |
+| Hardening                | `fix/hardening`            | main agent                    |
 
 Sub-agents worked in separate git worktrees with a written brief: the API
 contract, the commit rules and what "done" meant (lint, typecheck, tests,
