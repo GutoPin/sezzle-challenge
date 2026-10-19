@@ -1,0 +1,68 @@
+{
+  "app": {
+    "name": "Quotient",
+    "tagline": "Aritmética resuelta por una API en Go.",
+    "home": "Inicio de Quotient"
+  },
+  "header": {
+    "language": "Idioma",
+    "theme": {
+      "label": "Tema",
+      "light": "Tema claro",
+      "dark": "Tema oscuro",
+      "system": "Usar el tema del sistema"
+    },
+    "apiDocs": "Documentación de la API"
+  },
+  "footer": {
+    "note": "Cada resultado lo calcula la API de Quotient."
+  },
+  "calculator": {
+    "label": "Calculadora",
+    "display": "Pantalla",
+    "keypad": "Teclado",
+    "keys": {
+      "add": "Sumar",
+      "subtract": "Restar",
+      "multiply": "Multiplicar",
+      "divide": "Dividir",
+      "power": "Elevar a la potencia",
+      "sqrt": "Raíz cuadrada",
+      "percentage": "Porcentaje de",
+      "clear": "Borrar todo",
+      "backspace": "Borrar el último dígito",
+      "toggleSign": "Cambiar el signo",
+      "decimal": "Separador decimal",
+      "equals": "Igual"
+    },
+    "expressions": {
+      "percentage": "{{percent}} % de {{base}}"
+    }
+  },
+  "history": {
+    "title": "Historial",
+    "empty": "Aquí aparecerán tus cálculos.",
+    "clear": "Borrar historial",
+    "reuse": "Usar el resultado {{result}}"
+  },
+  "status": {
+    "label": "Estado de la API",
+    "online": "API disponible",
+    "offline": "API sin conexión",
+    "checking": "Comprobando la API…"
+  },
+  "errors": {
+    "invalid_json": "No se pudo leer la solicitud. Inténtalo de nuevo.",
+    "invalid_operand_count": "Esa operación necesita otra cantidad de valores.",
+    "unknown_field": "La solicitud incluye un campo que la API no acepta.",
+    "unknown_operation": "Esa operación no está disponible.",
+    "payload_too_large": "Los datos son demasiado grandes para enviarlos.",
+    "division_by_zero": "No se puede dividir entre cero.",
+    "negative_square_root": "La raíz cuadrada necesita un número que no sea negativo.",
+    "result_out_of_range": "El resultado es demasiado grande para mostrarlo.",
+    "network": "No se puede conectar con la API. Revisa tu conexión e inténtalo de nuevo.",
+    "timeout": "La API tardó demasiado en responder. Inténtalo de nuevo.",
+    "unknown": "Algo salió mal. Inténtalo de nuevo.",
+    "max_digits": "Los números pueden tener hasta {{max}} dígitos."
+  }
+}
