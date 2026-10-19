@@ -1,8 +1,7 @@
 {
   "app": {
     "name": "Quotient",
-    "tagline": "Arithmetic, worked out by a Go API.",
-    "home": "Quotient home"
+    "tagline": "Arithmetic, worked out by a Go API."
   },
   "header": {
     "language": "Language",
@@ -13,9 +12,6 @@
       "system": "Match system theme"
     },
     "apiDocs": "API docs"
-  },
-  "footer": {
-    "note": "Every result is computed by the Quotient API."
   },
   "calculator": {
     "label": "Calculator",
