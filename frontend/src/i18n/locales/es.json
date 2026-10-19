@@ -11,7 +11,8 @@
       "dark": "Tema oscuro",
       "system": "Usar el tema del sistema"
     },
-    "apiDocs": "Documentación de la API"
+    "apiDocs": "Documentación de la API",
+    "skipToMain": "Ir al contenido principal"
   },
   "calculator": {
     "label": "Calculadora",
@@ -55,6 +56,8 @@
     "title": "Historial",
     "empty": "Aquí aparecerán tus cálculos.",
     "clear": "Borrar historial",
+    "cleared": "Historial borrado.",
+    "undo": "Deshacer",
     "reuse": "Usar el resultado {{result}}",
     "description": "Elige un resultado para usarlo en tu próximo cálculo."
   },

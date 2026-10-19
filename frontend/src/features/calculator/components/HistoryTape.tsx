@@ -8,13 +8,16 @@ interface HistoryTapeProps {
   entries: HistoryEntry[]
   onRecall: (value: number) => void
   onClear: () => void
+  /** The tape was just cleared and can still be restored. */
+  canUndo: boolean
+  onUndo: () => void
 }
 
 /**
  * History drawn as an adding machine's paper tape: each calculation printed
  * in a line, newest at the top, and any result can be pulled back in.
  */
-export function HistoryTape({ entries, onRecall, onClear }: HistoryTapeProps) {
+export function HistoryTape({ entries, onRecall, onClear, canUndo, onUndo }: HistoryTapeProps) {
   const { t } = useTranslation()
   const format = useNumberFormat()
   const expression = useExpression()
@@ -25,21 +28,29 @@ export function HistoryTape({ entries, onRecall, onClear }: HistoryTapeProps) {
         <h2 id="history-title" className="text-lg font-semibold tracking-tight">
           {t('history.title')}
         </h2>
-        {entries.length > 0 && (
+        {(entries.length > 0 || canUndo) && (
+          // One button for both actions, so focus stays on it when Clear turns into Undo.
           <button
             type="button"
-            onClick={onClear}
-            className="rounded-xs text-sm text-ink-muted underline-offset-2 hover:text-ink hover:underline"
+            onClick={canUndo ? onUndo : onClear}
+            className="tap-target rounded-xs text-sm text-ink-muted underline-offset-2 hover:text-ink hover:underline"
           >
-            {t('history.clear')}
+            {canUndo ? t('history.undo') : t('history.clear')}
           </button>
         )}
       </div>
 
       <div className="flex flex-col bg-surface pt-4 pb-2 text-ink tape">
-        {entries.length === 0 ? (
-          <p className="px-5 py-8 text-center text-sm text-ink-muted">{t('history.empty')}</p>
-        ) : (
+        {/* Always mounted, so screen readers hear "History cleared" when it appears. */}
+        <p
+          role="status"
+          className={
+            entries.length === 0 ? 'px-5 py-8 text-center text-sm text-ink-muted' : 'sr-only'
+          }
+        >
+          {entries.length === 0 && (canUndo ? t('history.cleared') : t('history.empty'))}
+        </p>
+        {entries.length > 0 && (
           <>
             <p className="px-5 pb-2 text-sm text-ink-muted">{t('history.description')}</p>
             <ol className="max-h-96 overflow-y-auto overscroll-contain">
@@ -56,7 +67,7 @@ export function HistoryTape({ entries, onRecall, onClear }: HistoryTapeProps) {
                         onRecall(entry.result)
                       }}
                       aria-label={t('history.reuse', { result })}
-                      className="group block w-full px-5 py-2.5 text-right font-mono hover:bg-sunken focus-visible:bg-sunken"
+                      className="block w-full px-5 py-2.5 text-right font-mono hover:bg-sunken focus-visible:bg-sunken focus-visible:-outline-offset-2"
                       dir="ltr"
                     >
                       <span className="block truncate text-xs text-ink-muted">

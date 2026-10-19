@@ -9,7 +9,7 @@ import {
 
 import { readStorage, writeStorage } from '@/shared/lib/storage'
 
-import { isTheme, ThemeContext, type ResolvedTheme, type Theme } from './ThemeContext'
+import { isTheme, THEME_COLORS, ThemeContext, type ResolvedTheme, type Theme } from './ThemeContext'
 
 export const THEME_STORAGE_KEY = 'quotient:theme'
 
@@ -41,6 +41,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   // flashes the previous palette.
   useLayoutEffect(() => {
     document.documentElement.dataset.theme = resolvedTheme
+    // index.html matches the bar to the OS theme; a theme picked here must win.
+    for (const meta of document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]')) {
+      meta.content = THEME_COLORS[resolvedTheme]
+    }
   }, [resolvedTheme])
 
   const setTheme = useCallback((next: Theme) => {
