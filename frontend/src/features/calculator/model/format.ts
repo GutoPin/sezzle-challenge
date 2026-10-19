@@ -50,7 +50,7 @@ export function formatEntry(entry: string, locale: string): string {
 
   const negative = entry.startsWith('-')
   const [integer = '0', fraction] = (negative ? entry.slice(1) : entry).split('.')
-  // BigInt keeps all 16 digits exact; Number would round past 2^53.
+  // BigInt groups the digits exactly as typed, without a float round trip.
   const grouped = cached(integerFormatters, locale, {}).format(BigInt(integer || '0'))
   const decimals = fraction === undefined ? '' : decimalSeparator(locale) + fraction
   return (negative ? MINUS : '') + grouped + decimals

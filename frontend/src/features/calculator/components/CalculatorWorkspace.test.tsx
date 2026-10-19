@@ -136,10 +136,10 @@ describe('CalculatorWorkspace', () => {
   it('limits how many digits can be typed', async () => {
     const { press } = setup()
 
-    await press(...Array.from({ length: 17 }, () => '9'))
+    await press(...Array.from({ length: 16 }, () => '9'))
 
-    expect(screen.getByRole('alert')).toHaveTextContent('Numbers can have up to 16 digits.')
-    expect(displayValue()).toBe('9,999,999,999,999,999')
+    expect(screen.getByRole('alert')).toHaveTextContent('Numbers can have up to 15 digits.')
+    expect(displayValue()).toBe('999,999,999,999,999')
   })
 
   it('accepts input from the physical keyboard', async () => {

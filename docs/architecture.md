@@ -132,7 +132,7 @@ that resends the exact failed request.
 
 The entry is a string while typed, so intermediate states like `0.` and
 `-0` survive, and it is formatted for display with `Intl.NumberFormat` in the
-active language. Integer parts go through `BigInt` so all 16 digits group
+active language. Integer parts go through `BigInt` so all 15 digits group
 correctly. Results above 10¹⁶ or below 10⁻⁹ switch to scientific notation.
 The keyboard accepts both `.` and `,` as the decimal separator.
 

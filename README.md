@@ -211,9 +211,9 @@ More detail, with diagrams, is in [`docs/architecture.md`](docs/architecture.md)
 
 - No accounts, rate limiting or persistence on the server: the API is
   stateless, and history lives in the browser's `localStorage`.
-- Typed numbers are limited to 16 digits, and results are rounded to 15, so
-  very long integers are approximate. Huge or tiny results switch to
-  scientific notation.
+- Typed numbers are limited to 15 digits, the most a `float64` stores
+  exactly, and results are rounded to 15 significant digits. Huge or tiny
+  results switch to scientific notation.
 - `/docs` loads the Scalar API reference from a CDN; everything else is
   self-contained.
 
