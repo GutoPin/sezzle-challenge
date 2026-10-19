@@ -72,7 +72,7 @@ export function CalculatorWorkspace({ intro }: CalculatorWorkspaceProps) {
         </p>
       </section>
 
-      <div className="grid grid-cols-1 items-start gap-10 [grid-area:side] xl:grid-cols-[minmax(0,19rem)_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 items-start gap-10 [grid-area:side] md:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:grid-cols-1">
         <HistoryTape
           entries={history.entries}
           onRecall={(value) => {
