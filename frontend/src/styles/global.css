@@ -1,0 +1,89 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/bricolage-grotesque/opsz.css';
+@import '@fontsource-variable/martian-mono/standard.css';
+@import './tokens.css';
+
+/* The theme lives on <html>, so `dark:` must follow it rather than the OS. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@theme inline {
+  /* Drop Tailwind's defaults so every colour, radius and shadow comes from tokens.css. */
+  --color-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+  --inset-shadow-*: initial;
+
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-canvas: var(--q-color-canvas);
+  --color-surface: var(--q-color-surface);
+  --color-sunken: var(--q-color-sunken);
+  --color-raised: var(--q-color-raised);
+  --color-line: var(--q-color-line);
+  --color-line-strong: var(--q-color-line-strong);
+  --color-ink: var(--q-color-ink);
+  --color-ink-muted: var(--q-color-ink-muted);
+  --color-accent: var(--q-color-accent);
+  --color-accent-hover: var(--q-color-accent-hover);
+  --color-on-accent: var(--q-color-on-accent);
+  --color-accent-text: var(--q-color-accent-text);
+  --color-danger: var(--q-color-danger);
+  --color-danger-surface: var(--q-color-danger-surface);
+  --color-success: var(--q-color-success);
+  --color-success-surface: var(--q-color-success-surface);
+  --color-focus: var(--q-color-focus);
+
+  --font-sans: 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Martian Mono Variable', ui-monospace, monospace;
+
+  --text-display: clamp(2.5rem, 1.6rem + 4vw, 4rem);
+  --text-display--line-height: 1;
+  --text-display--letter-spacing: -0.03em;
+
+  --radius-xs: var(--q-radius-xs);
+  --radius-sm: var(--q-radius-sm);
+  --radius-lg: var(--q-radius-lg);
+  --radius-full: var(--q-radius-full);
+
+  --shadow-overlay: var(--q-shadow-overlay);
+  --inset-shadow-well: var(--q-shadow-inset);
+
+  --ease-out: var(--q-ease-out);
+  --ease-in-out: var(--q-ease-in-out);
+}
+
+@layer base {
+  html {
+    background-color: var(--q-color-canvas);
+    color: var(--q-color-ink);
+    font-family: var(--font-sans);
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    min-height: 100dvh;
+  }
+
+  ::selection {
+    background-color: var(--q-color-accent);
+    color: var(--q-color-on-accent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--q-color-focus);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

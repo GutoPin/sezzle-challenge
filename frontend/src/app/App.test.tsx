@@ -1,0 +1,40 @@
+import { act, render, screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { afterEach, describe, expect, it } from 'vitest'
+
+import { i18n } from '@/i18n'
+
+import { App } from './App'
+
+describe('App', () => {
+  afterEach(async () => {
+    await act(() => i18n.changeLanguage('en'))
+  })
+
+  it('renders the page landmarks', () => {
+    render(<App />)
+
+    const header = screen.getByRole('banner')
+    expect(within(header).getByRole('link', { name: 'Quotient' })).toHaveAttribute('href', '/')
+    expect(within(header).getByRole('link', { name: 'API docs' })).toHaveAttribute('href', '/docs')
+    expect(within(header).getByRole('group', { name: 'Language' })).toBeInTheDocument()
+    expect(within(header).getByRole('group', { name: 'Theme' })).toBeInTheDocument()
+
+    expect(screen.getByRole('main')).toContainElement(
+      screen.getByRole('heading', { level: 1, name: 'Quotient' }),
+    )
+    expect(screen.getByRole('contentinfo')).toHaveTextContent('Arithmetic, worked out by a Go API.')
+  })
+
+  it('translates the shell when the language changes', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.click(screen.getByRole('button', { name: 'Español' }))
+
+    expect(screen.getByRole('link', { name: 'Documentación de la API' })).toBeInTheDocument()
+    expect(screen.getByRole('contentinfo')).toHaveTextContent(
+      'Aritmética resuelta por una API en Go.',
+    )
+  })
+})

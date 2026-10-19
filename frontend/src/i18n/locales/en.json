@@ -1,0 +1,64 @@
+{
+  "app": {
+    "name": "Quotient",
+    "tagline": "Arithmetic, worked out by a Go API."
+  },
+  "header": {
+    "language": "Language",
+    "theme": {
+      "label": "Theme",
+      "light": "Light theme",
+      "dark": "Dark theme",
+      "system": "Match system theme"
+    },
+    "apiDocs": "API docs"
+  },
+  "calculator": {
+    "label": "Calculator",
+    "display": "Display",
+    "keypad": "Keypad",
+    "keys": {
+      "add": "Add",
+      "subtract": "Subtract",
+      "multiply": "Multiply",
+      "divide": "Divide",
+      "power": "Raise to the power of",
+      "sqrt": "Square root",
+      "percentage": "Percent of",
+      "clear": "Clear",
+      "backspace": "Delete last digit",
+      "toggleSign": "Toggle sign",
+      "decimal": "Decimal point",
+      "equals": "Equals"
+    },
+    "expressions": {
+      "percentage": "{{percent}}% of {{base}}"
+    }
+  },
+  "history": {
+    "title": "History",
+    "empty": "Your calculations will appear here.",
+    "clear": "Clear history",
+    "reuse": "Use result {{result}}"
+  },
+  "status": {
+    "label": "API status",
+    "online": "API online",
+    "offline": "API offline",
+    "checking": "Checking API…"
+  },
+  "errors": {
+    "invalid_json": "The request could not be read. Try again.",
+    "invalid_operand_count": "That operation needs a different number of values.",
+    "unknown_field": "The request included a field the API does not accept.",
+    "unknown_operation": "That operation is not supported.",
+    "payload_too_large": "That input is too large to send.",
+    "division_by_zero": "You can’t divide by zero.",
+    "negative_square_root": "Square roots need a number that isn’t negative.",
+    "result_out_of_range": "The result is too large to show.",
+    "network": "Can’t reach the API. Check your connection and try again.",
+    "timeout": "The API took too long to answer. Try again.",
+    "unknown": "Something went wrong. Try again.",
+    "max_digits": "Numbers can have up to {{max}} digits."
+  }
+}

@@ -1,0 +1,75 @@
+/*
+ * Quotient brand tokens.
+ *
+ * Every colour is written once as light-dark(light, dark). The active pair is
+ * picked by color-scheme: it follows the OS by default and is pinned when the
+ * ThemeProvider sets data-theme on <html>. Text tiers clear WCAG AA (4.5:1)
+ * on every surface in both themes; --q-color-line-strong clears 3:1 for
+ * control boundaries.
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* Warm stone neutrals and a deep, slightly brown ink. */
+  --q-color-canvas: light-dark(oklch(95.8% 0.004 75), oklch(18.5% 0.008 60));
+  --q-color-surface: light-dark(oklch(99% 0.002 75), oklch(22% 0.009 60));
+  --q-color-sunken: light-dark(oklch(92.5% 0.006 75), oklch(26.5% 0.01 60));
+  /* Lifted out of a sunken track, so it is lighter than --q-color-sunken in both themes. */
+  --q-color-raised: light-dark(oklch(99.5% 0.002 75), oklch(34% 0.011 60));
+  --q-color-line: light-dark(oklch(88% 0.007 75), oklch(31% 0.01 60));
+  --q-color-line-strong: light-dark(oklch(62% 0.01 70), oklch(52% 0.012 60));
+  --q-color-ink: light-dark(oklch(23.5% 0.014 55), oklch(94.5% 0.008 85));
+  --q-color-ink-muted: light-dark(oklch(48% 0.012 60), oklch(73% 0.012 75));
+
+  /*
+   * Saffron, after the one coloured equals key on classic desk calculators.
+   * It is a fill colour: text set on it uses --q-color-on-accent. Where the
+   * accent itself must be read against the canvas (links, focus rings),
+   * --q-color-accent-text is the darker cut that keeps contrast in light mode.
+   */
+  --q-color-accent: light-dark(oklch(82% 0.155 82), oklch(83% 0.16 84));
+  --q-color-accent-hover: light-dark(oklch(77% 0.155 78), oklch(87% 0.15 86));
+  --q-color-on-accent: light-dark(oklch(23.5% 0.014 55), oklch(21% 0.02 60));
+  --q-color-accent-text: light-dark(oklch(52% 0.105 68), oklch(85% 0.15 85));
+
+  --q-color-danger: light-dark(oklch(52% 0.18 28), oklch(72% 0.16 28));
+  --q-color-danger-surface: light-dark(oklch(95.5% 0.022 28), oklch(29% 0.06 28));
+  --q-color-success: light-dark(oklch(50% 0.11 155), oklch(76% 0.13 155));
+  --q-color-success-surface: light-dark(oklch(95.5% 0.03 155), oklch(28% 0.05 155));
+
+  --q-color-focus: var(--q-color-accent-text);
+  --q-color-shadow: light-dark(oklch(23.5% 0.014 55 / 14%), oklch(0% 0 0 / 50%));
+
+  /* Two families of corners: tight for chrome, round for anything pressable. */
+  --q-radius-xs: 4px;
+  --q-radius-sm: 8px;
+  --q-radius-lg: 20px;
+  --q-radius-full: 9999px;
+
+  /* Shadows are reserved for things that float above the page. */
+  --q-shadow-overlay: 0 1px 2px var(--q-color-shadow), 0 12px 32px -8px var(--q-color-shadow);
+  --q-shadow-inset: inset 0 1px 2px var(--q-color-shadow);
+
+  --q-duration-instant: 90ms;
+  --q-duration-quick: 160ms;
+  --q-duration-moderate: 260ms;
+  --q-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --q-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --q-duration-instant: 0ms;
+    --q-duration-quick: 0ms;
+    --q-duration-moderate: 0ms;
+  }
+}
