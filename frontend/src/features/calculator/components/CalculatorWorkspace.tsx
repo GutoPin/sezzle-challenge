@@ -48,7 +48,7 @@ export function CalculatorWorkspace({ intro }: CalculatorWorkspaceProps) {
     : ''
 
   return (
-    <div className="grid items-start gap-x-12 gap-y-10 [grid-template-areas:'intro'_'calc'_'side'] lg:grid-cols-[minmax(0,25rem)_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:[grid-template-areas:'calc_intro'_'calc_side']">
+    <div className="grid grid-cols-1 items-start gap-x-12 gap-y-10 [grid-template-areas:'intro'_'calc'_'side'] lg:grid-cols-[minmax(0,25rem)_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:[grid-template-areas:'calc_intro'_'calc_side']">
       {intro && <div className="[grid-area:intro]">{intro}</div>}
       <section
         aria-label={t('calculator.label')}
@@ -72,7 +72,7 @@ export function CalculatorWorkspace({ intro }: CalculatorWorkspaceProps) {
         </p>
       </section>
 
-      <div className="grid items-start gap-10 [grid-area:side] xl:grid-cols-[minmax(0,19rem)_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 items-start gap-10 [grid-area:side] xl:grid-cols-[minmax(0,19rem)_minmax(0,1fr)]">
         <HistoryTape
           entries={history.entries}
           onRecall={(value) => {
