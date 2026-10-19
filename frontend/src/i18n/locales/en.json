@@ -62,7 +62,6 @@
     "description": "Select a result to use it in your next calculation."
   },
   "status": {
-    "label": "API status",
     "online": "API online",
     "offline": "API offline",
     "checking": "Checking API…"
@@ -87,7 +86,6 @@
     "internal_error": "The API hit an unexpected problem. Try again."
   },
   "hero": {
-    "eyebrow": "Calculator · Go API",
     "title": "Arithmetic, worked out.",
     "body": "Type on the keypad or your keyboard. Every result is calculated by a Go microservice and rounded to 15 significant digits, so 0.1 + 0.2 is simply 0.3."
   }
