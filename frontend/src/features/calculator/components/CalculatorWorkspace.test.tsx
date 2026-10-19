@@ -59,6 +59,26 @@ describe('CalculatorWorkspace', () => {
     await expectDisplay('20')
   })
 
+  it('highlights power and percent like the other operators', async () => {
+    const { press } = setup()
+
+    await press('2', 'Raise to the power of')
+    expect(screen.getByRole('button', { name: 'Raise to the power of' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+
+    await press('Percent of')
+    expect(screen.getByRole('button', { name: 'Raise to the power of' })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    )
+    expect(screen.getByRole('button', { name: 'Percent of' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+  })
+
   it('takes square roots and percentages', async () => {
     const { press } = setup()
 
