@@ -22,6 +22,7 @@ var (
 	errNotFound         = apiError{http.StatusNotFound, "not_found", "no route matches this path"}
 	errMethodNotAllowed = apiError{http.StatusMethodNotAllowed, "method_not_allowed", "method not allowed on this path"}
 	errInternal         = apiError{http.StatusInternalServerError, "internal_error", "internal server error"}
+	errNullOperand      = apiError{http.StatusBadRequest, "invalid_operand", "operands must be numbers, not null"}
 )
 
 // fromDomain maps calculator errors to their HTTP representation. Anything
