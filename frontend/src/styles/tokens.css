@@ -15,6 +15,8 @@
   --q-color-canvas: light-dark(oklch(95.8% 0.004 75), oklch(18.5% 0.008 60));
   --q-color-surface: light-dark(oklch(99% 0.002 75), oklch(22% 0.009 60));
   --q-color-sunken: light-dark(oklch(92.5% 0.006 75), oklch(26.5% 0.01 60));
+  /* Lifted out of a sunken track, so it is lighter than --q-color-sunken in both themes. */
+  --q-color-raised: light-dark(oklch(99.5% 0.002 75), oklch(34% 0.011 60));
   --q-color-line: light-dark(oklch(88% 0.007 75), oklch(31% 0.01 60));
   --q-color-line-strong: light-dark(oklch(62% 0.01 70), oklch(52% 0.012 60));
   --q-color-ink: light-dark(oklch(23.5% 0.014 55), oklch(94.5% 0.008 85));
