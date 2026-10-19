@@ -3,10 +3,10 @@ FRONTEND := frontend
 
 .DEFAULT_GOAL := help
 .PHONY: help setup dev dev-backend dev-frontend test test-backend test-frontend \
-        coverage lint fmt build docker-up docker-down clean
+        coverage coverage-report lint fmt build docker-up docker-down clean
 
 help: ## Show available commands
-	@awk 'BEGIN {FS = ":.*## "} /^[a-zA-Z_-]+:.*## / {printf "  \033[36m%-14s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+	@awk 'BEGIN {FS = ":.*## "} /^[a-zA-Z_-]+:.*## / {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 setup: ## Install backend and frontend dependencies
 	cd $(BACKEND) && go mod download
@@ -35,6 +35,9 @@ coverage: ## Generate coverage reports for both layers
 		go tool cover -html=coverage.out -o coverage.html
 	cd $(FRONTEND) && pnpm test:coverage
 
+coverage-report: ## Regenerate docs/coverage.md from fresh test runs
+	./scripts/coverage-report.sh
+
 lint: ## Lint both layers
 	cd $(BACKEND) && golangci-lint run ./...
 	cd $(FRONTEND) && pnpm lint && pnpm typecheck
@@ -47,7 +50,7 @@ build: ## Build the API binary and the frontend bundle
 	cd $(BACKEND) && CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o bin/api ./cmd/api
 	cd $(FRONTEND) && pnpm build
 
-docker-up: ## Build and run the full stack at http://localhost:8080
+docker-up: ## Build and run the full stack at http://localhost:8080 (HOST_PORT to change)
 	docker compose up --build
 
 docker-down: ## Stop the full stack
