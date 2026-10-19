@@ -15,12 +15,12 @@ interface DisplayProps {
 // Errors where the same request may well succeed a second time.
 const RETRYABLE = new Set<CalculatorErrorCode>(['network', 'timeout', 'unknown', 'internal_error'])
 
-// Martian Mono is wide, so long numbers step down in size instead of overflowing.
-function sizeFor(text: string): string {
-  if (text.length <= 9) return 'text-[2.75rem]'
-  if (text.length <= 13) return 'text-[2rem]'
-  if (text.length <= 18) return 'text-[1.5rem]'
-  return 'text-[1.2rem]'
+// Every Martian Mono glyph, separators included, advances 0.675em at this
+// tracking, so a font size of 100cqi / (length * GLYPH_EM) always fits one line.
+const GLYPH_EM = 0.68
+
+function fitFontSize(text: string): string {
+  return `min(2.75rem, 100cqi / ${(text.length * GLYPH_EM).toFixed(2)})`
 }
 
 export function Display({ state, onRetry }: DisplayProps) {
@@ -40,23 +40,28 @@ export function Display({ state, onRetry }: DisplayProps) {
 
   return (
     <div
+      role="group"
       aria-label={t('calculator.display')}
       aria-busy={pending}
-      className="flex min-h-36 flex-col justify-end gap-1 rounded-sm bg-sunken px-4 pt-3 pb-4 inset-shadow-well"
+      className="@container flex min-h-36 flex-col justify-end gap-1 rounded-sm bg-sunken px-4 pt-3 pb-4 inset-shadow-well"
     >
-      <p className="min-h-6 truncate text-right font-mono text-sm text-ink-muted" dir="ltr">
-        {context}
+      {/* RTL cuts an overflowing expression at its start, keeping the latest operator in view. */}
+      <p className="min-h-6 truncate text-right font-mono text-sm text-ink-muted" dir="rtl">
+        <bdi dir="ltr">{context}</bdi>
       </p>
       <p
         data-testid="display-value"
         dir="ltr"
-        className={`text-right font-mono leading-tight font-medium tracking-tight break-all tabular-nums transition-opacity duration-(--q-duration-quick) ${sizeFor(entry)} ${pending ? 'opacity-40' : ''}`}
+        style={{ fontSize: fitFontSize(entry) }}
+        // A fixed line keeps the expression above from shifting as the number shrinks.
+        className={`flex h-14 items-end justify-end font-mono leading-tight font-medium tracking-tight whitespace-nowrap tabular-nums transition-opacity duration-(--q-duration-quick) ${pending ? 'opacity-40 delay-150' : ''}`}
       >
         {entry}
       </p>
       <div className="flex min-h-6 items-center justify-end gap-2 text-sm">
         {pending && (
-          <span className="inline-flex items-center gap-2 text-ink-muted">
+          // Fades in only if the API is slow, so quick answers never flicker.
+          <span className="inline-flex items-center gap-2 text-ink-muted transition-opacity delay-150 duration-(--q-duration-quick) starting:opacity-0">
             <span className="size-1.5 animate-pulse rounded-full bg-accent" aria-hidden="true" />
             {t('calculator.calculating')}
           </span>
@@ -68,7 +73,7 @@ export function Display({ state, onRetry }: DisplayProps) {
               <button
                 type="button"
                 onClick={onRetry}
-                className="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 font-medium text-ink underline-offset-2 hover:underline"
+                className="tap-target inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 font-medium text-ink underline-offset-2 hover:underline"
               >
                 <RetryIcon />
                 {t('calculator.retry')}
