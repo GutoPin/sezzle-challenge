@@ -1,0 +1,206 @@
+openapi: 3.1.0
+info:
+  title: Quotient Calculator API
+  version: 1.0.0
+  description: |
+    Stateless arithmetic service behind the Quotient calculator.
+
+    Every operation is a `POST` to `/api/v1/operations/{operation}` with a JSON
+    body holding the operands. Results are rounded to 15 significant digits, so
+    `0.1 + 0.2` returns `0.3` rather than `0.30000000000000004`.
+
+    Errors share one envelope with a stable, machine-readable `code`. Clients
+    should branch on `code` and treat `message` as a human-readable hint.
+servers:
+  - url: http://localhost:8080
+    description: Local development
+tags:
+  - name: calculator
+  - name: meta
+
+paths:
+  /api/v1/health:
+    get:
+      tags: [meta]
+      summary: Liveness probe
+      operationId: getHealth
+      responses:
+        "200":
+          description: The service is up.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Health"
+
+  /api/v1/operations:
+    get:
+      tags: [calculator]
+      summary: List supported operations
+      operationId: listOperations
+      responses:
+        "200":
+          description: Every operation with its symbol and number of operands.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OperationList"
+
+  /api/v1/operations/{operation}:
+    post:
+      tags: [calculator]
+      summary: Run an operation
+      description: |
+        | operation    | operands | result            |
+        |--------------|----------|-------------------|
+        | `add`        | `[a, b]` | a + b             |
+        | `subtract`   | `[a, b]` | a − b             |
+        | `multiply`   | `[a, b]` | a × b             |
+        | `divide`     | `[a, b]` | a ÷ b             |
+        | `power`      | `[a, b]` | a raised to b     |
+        | `sqrt`       | `[a]`    | √a                |
+        | `percentage` | `[a, b]` | a% of b (a/100×b) |
+      operationId: calculate
+      parameters:
+        - name: operation
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/OperationName"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CalculationRequest"
+            examples:
+              divide:
+                summary: 10 ÷ 4
+                value: { operands: [10, 4] }
+              sqrt:
+                summary: √16
+                value: { operands: [16] }
+      responses:
+        "200":
+          description: The calculation succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CalculationResult"
+              example: { operation: divide, operands: [10, 4], result: 2.5 }
+        "400":
+          description: "Malformed request: `invalid_json`, `unknown_field`, `invalid_operand_count` or `invalid_operand`."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example: { error: { code: invalid_operand_count, message: "wrong number of operands: sqrt expects 1, got 2" } }
+        "404":
+          description: "`unknown_operation`: the path names an operation that does not exist."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "405":
+          description: "`method_not_allowed`: only POST is accepted."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "413":
+          description: "`payload_too_large`: the body exceeds 1 KiB."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
+          description: "The input is well formed but has no real, finite answer: `division_by_zero`, `negative_square_root`, `undefined_result` or `result_out_of_range`."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example: { error: { code: division_by_zero, message: "cannot divide by zero" } }
+
+components:
+  schemas:
+    OperationName:
+      type: string
+      enum: [add, subtract, multiply, divide, power, sqrt, percentage]
+
+    Health:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          const: ok
+
+    OperationList:
+      type: object
+      required: [operations]
+      properties:
+        operations:
+          type: array
+          items:
+            type: object
+            required: [name, symbol, arity]
+            properties:
+              name:
+                $ref: "#/components/schemas/OperationName"
+              symbol:
+                type: string
+                examples: ["+"]
+              arity:
+                type: integer
+                enum: [1, 2]
+
+    CalculationRequest:
+      type: object
+      additionalProperties: false
+      required: [operands]
+      properties:
+        operands:
+          type: array
+          items:
+            type: number
+          minItems: 1
+          maxItems: 2
+
+    CalculationResult:
+      type: object
+      required: [operation, operands, result]
+      properties:
+        operation:
+          $ref: "#/components/schemas/OperationName"
+        operands:
+          type: array
+          items:
+            type: number
+        result:
+          type: number
+
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code:
+              type: string
+              enum:
+                - invalid_json
+                - unknown_field
+                - invalid_operand_count
+                - invalid_operand
+                - unknown_operation
+                - not_found
+                - method_not_allowed
+                - payload_too_large
+                - division_by_zero
+                - negative_square_root
+                - undefined_result
+                - result_out_of_range
+                - internal_error
+            message:
+              type: string
