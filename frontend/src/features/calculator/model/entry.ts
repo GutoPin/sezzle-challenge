@@ -1,7 +1,9 @@
 // The number being typed is kept as a string, not a number: "0.", "-0" and
 // "2.50" are all valid mid-edit states that a float would lose.
 
-export const MAX_DIGITS = 16
+// Every 15-digit decimal survives the trip to float64 and back; 16 digits
+// don't (9999999999999999 becomes 1e16), and the API rounds to 15 anyway.
+export const MAX_DIGITS = 15
 
 export function digitCount(entry: string): number {
   return entry.replace(/\D/g, '').length

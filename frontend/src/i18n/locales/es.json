@@ -62,7 +62,6 @@
     "description": "Elige un resultado para usarlo en tu próximo cálculo."
   },
   "status": {
-    "label": "Estado de la API",
     "online": "API disponible",
     "offline": "API sin conexión",
     "checking": "Comprobando la API…"
@@ -87,7 +86,6 @@
     "internal_error": "La API tuvo un problema inesperado. Inténtalo de nuevo."
   },
   "hero": {
-    "eyebrow": "Calculadora · API en Go",
     "title": "Aritmética, bien resuelta.",
     "body": "Escribe con el teclado en pantalla o con el tuyo. Cada resultado lo calcula un microservicio en Go y se redondea a 15 cifras significativas, así que 0,1 + 0,2 da exactamente 0,3."
   }

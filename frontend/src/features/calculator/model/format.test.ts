@@ -31,7 +31,7 @@ describe('formatEntry', () => {
     ['-0', 'en', '−0'],
     ['-1234.5', 'es', '−1234,5'],
     ['1234567', 'es', '1.234.567'],
-    ['9999999999999999', 'en', '9,999,999,999,999,999'],
+    ['999999999999999', 'en', '999,999,999,999,999'],
   ])('formats entry %j in %s as %j', (entry, locale, expected) => {
     expect(formatEntry(entry, locale)).toBe(expected)
   })
