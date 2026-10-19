@@ -13,14 +13,15 @@ function Shell() {
 
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col px-4 sm:px-8">
-      <header className="flex items-center justify-between gap-3 py-4">
+      {/* Below about 350px the controls wrap under the wordmark instead of scrolling sideways. */}
+      <header className="flex flex-wrap items-center justify-between gap-2 py-4 sm:gap-x-3">
         <a href="/" className="rounded-sm">
           <Wordmark />
         </a>
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="ml-auto flex items-center gap-1.5 sm:gap-3">
           <a
             href="/docs"
-            className="inline-flex h-8 min-w-8 items-center justify-center gap-1.5 rounded-full text-sm font-medium text-ink-muted transition-colors duration-(--q-duration-quick) hover:text-ink sm:px-2"
+            className="tap-target inline-flex h-8 min-w-8 items-center justify-center gap-1.5 rounded-full text-sm font-medium text-ink-muted transition-colors duration-(--q-duration-quick) hover:text-ink sm:px-2"
           >
             <BookIcon />
             <span className="max-sm:sr-only">{t('header.apiDocs')}</span>

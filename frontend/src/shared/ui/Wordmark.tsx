@@ -20,7 +20,9 @@ export function Wordmark() {
   return (
     <span className="inline-flex items-center gap-2">
       <BrandMark />
-      <span className="text-lg font-semibold tracking-tight">{t('app.name')}</span>
+      <span translate="no" className="text-lg font-semibold tracking-tight">
+        {t('app.name')}
+      </span>
     </span>
   )
 }

@@ -60,6 +60,8 @@
     font-optical-sizing: auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Every control draws its own pressed state. */
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
@@ -85,6 +87,20 @@
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
+  }
+}
+
+/*
+ * Grows a small control's hit area to at least 44px square without moving
+ * anything around it.
+ */
+@utility tap-target {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: min(0px, calc(50% - 22px));
   }
 }
 

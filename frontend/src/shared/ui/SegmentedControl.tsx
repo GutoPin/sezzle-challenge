@@ -34,7 +34,8 @@ export function SegmentedControl<Value extends string>({
           onClick={() => {
             onChange(option.value)
           }}
-          className="inline-flex h-8 min-w-8 items-center justify-center rounded-full px-2 text-sm font-medium text-ink-muted transition-colors duration-(--q-duration-quick) ease-out hover:text-ink aria-pressed:bg-raised aria-pressed:text-ink"
+          // Segments share edges, so their hit areas only grow vertically.
+          className="tap-target inline-flex h-8 min-w-8 items-center justify-center rounded-full px-2 text-sm font-medium text-ink-muted transition-colors duration-(--q-duration-quick) ease-out after:inset-x-0 hover:text-ink aria-pressed:bg-raised aria-pressed:text-ink"
         >
           {option.content}
         </button>
