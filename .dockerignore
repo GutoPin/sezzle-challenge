@@ -1,0 +1,13 @@
+.git
+.github
+.claude
+.agents
+agent
+**/node_modules
+frontend/dist
+frontend/coverage
+backend/bin
+backend/coverage.*
+*.md
+.env
+.env.*
