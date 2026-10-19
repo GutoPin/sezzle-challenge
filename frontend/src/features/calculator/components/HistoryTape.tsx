@@ -29,7 +29,7 @@ export function HistoryTape({ entries, onRecall, onClear }: HistoryTapeProps) {
           <button
             type="button"
             onClick={onClear}
-            className="rounded-xs text-sm text-ink-muted underline-offset-2 hover:text-ink hover:underline"
+            className="tap-target rounded-xs text-sm text-ink-muted underline-offset-2 hover:text-ink hover:underline"
           >
             {t('history.clear')}
           </button>
@@ -56,7 +56,7 @@ export function HistoryTape({ entries, onRecall, onClear }: HistoryTapeProps) {
                         onRecall(entry.result)
                       }}
                       aria-label={t('history.reuse', { result })}
-                      className="group block w-full px-5 py-2.5 text-right font-mono hover:bg-sunken focus-visible:bg-sunken"
+                      className="block w-full px-5 py-2.5 text-right font-mono hover:bg-sunken focus-visible:bg-sunken focus-visible:-outline-offset-2"
                       dir="ltr"
                     >
                       <span className="block truncate text-xs text-ink-muted">
