@@ -5,24 +5,22 @@ import { afterAll, afterEach, beforeAll } from 'vitest'
 
 import { server } from './server'
 
-// jsdom does not implement matchMedia. Tests that care about a specific
-// media query override this with vi.stubGlobal.
-if (!('matchMedia' in window)) {
-  Object.defineProperty(window, 'matchMedia', {
-    configurable: true,
-    writable: true,
-    value: (query: string): MediaQueryList => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addEventListener: () => undefined,
-      removeEventListener: () => undefined,
-      addListener: () => undefined,
-      removeListener: () => undefined,
-      dispatchEvent: () => false,
-    }),
-  })
-}
+// jsdom does not implement matchMedia. Tests that care about a specific media
+// query take control of it with mockColorScheme from ./matchMedia.
+Object.defineProperty(window, 'matchMedia', {
+  configurable: true,
+  writable: true,
+  value: (query: string): MediaQueryList => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addEventListener: () => undefined,
+    removeEventListener: () => undefined,
+    addListener: () => undefined,
+    removeListener: () => undefined,
+    dispatchEvent: () => false,
+  }),
+})
 
 beforeAll(() => {
   server.listen({ onUnhandledRequest: 'error' })
