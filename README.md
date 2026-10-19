@@ -128,6 +128,20 @@ make coverage-report    # writes docs/coverage.md
   A locale test checks that English and Spanish have the same keys and a
   message for every API error code.
 
+Edge cases are tested on purpose, because a calculator is easy to poke at:
+
+- Division by zero (including `0 ÷ 0`, `-0` and divisors that underflow to
+  zero), square roots of negatives, `(-8)^0.5`, `0^-1` and overflow past
+  `1.8e308` all return a specific 4xx error. NaN and infinity never reach
+  the response.
+- Malformed bodies (`null` or string operands, `NaN` literals, trailing data,
+  unknown fields, deeply nested JSON, bodies over 1 KiB) are rejected with a
+  400, 413 or 404, never a 500.
+- The frontend's state machine is driven by 20,000 seeded random key presses,
+  with simulated API answers and failures, and must stay valid after each one.
+- A 200 response without a numeric `result` shows an error, never
+  `undefined` on the display.
+
 Current numbers are in [`docs/coverage.md`](docs/coverage.md). CI
 ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs lint, tests with
 coverage and the Docker build on every push.

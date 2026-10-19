@@ -116,6 +116,16 @@ describe('CalculatorWorkspace', () => {
     await expectDisplay('42')
   })
 
+  it('never shows a malformed API answer as a number', async () => {
+    server.use(http.post('/api/v1/operations/:operation', () => HttpResponse.json({ ok: true })))
+    const { press } = setup()
+
+    await press('2', 'Add', '2', 'Equals')
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Something went wrong')
+    expect(displayValue()).toBe('2')
+  })
+
   it('shows progress and ignores input while the API is working', async () => {
     server.use(
       http.post('/api/v1/operations/:operation', async () => {

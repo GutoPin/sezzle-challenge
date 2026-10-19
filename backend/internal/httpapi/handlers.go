@@ -32,7 +32,8 @@ type operationsResponse struct {
 }
 
 type calculateRequest struct {
-	Operands []float64 `json:"operands"`
+	// Pointers, because encoding/json silently decodes null into 0.
+	Operands []*float64 `json:"operands"`
 }
 
 type calculateResponse struct {
@@ -61,14 +62,23 @@ func (h handlers) calculate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	operands := make([]float64, len(req.Operands))
+	for i, operand := range req.Operands {
+		if operand == nil {
+			writeError(w, errNullOperand)
+			return
+		}
+		operands[i] = *operand
+	}
+
 	op := calculator.Operation(r.PathValue("operation"))
-	result, err := h.calc.Calculate(op, req.Operands)
+	result, err := h.calc.Calculate(op, operands)
 	if err != nil {
 		writeError(w, fromDomain(err))
 		return
 	}
 
-	writeJSON(w, http.StatusOK, calculateResponse{Operation: op, Operands: req.Operands, Result: result})
+	writeJSON(w, http.StatusOK, calculateResponse{Operation: op, Operands: operands, Result: result})
 }
 
 func serveSpec(w http.ResponseWriter, _ *http.Request) {
