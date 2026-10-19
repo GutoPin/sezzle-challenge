@@ -142,6 +142,10 @@ Edge cases are tested on purpose, because a calculator is easy to poke at:
 - A 200 response without a numeric `result` shows an error, never
   `undefined` on the display.
 
+The server's resilience limits (connection and body timeouts, body and header
+size caps, panic recovery) and where DDoS protection belongs are covered in
+[`docs/architecture.md`](docs/architecture.md#resilience).
+
 Current numbers are in [`docs/coverage.md`](docs/coverage.md). CI
 ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs lint, tests with
 coverage and the Docker build on every push.
