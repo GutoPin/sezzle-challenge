@@ -1,5 +1,7 @@
 import { http, HttpResponse } from 'msw'
 
+import { OPERATIONS, type Operation } from '@/features/calculator/api/calculatorApi'
+
 interface OperationSpec {
   symbol: string
   arity: 1 | 2
@@ -8,7 +10,7 @@ interface OperationSpec {
 
 // An in-memory stand-in for the Go API, faithful enough that component tests
 // exercise the real request/response shapes rather than hand-rolled fixtures.
-const operations: Record<string, OperationSpec> = {
+const operations: Record<Operation, OperationSpec> = {
   add: { symbol: '+', arity: 2, evaluate: ([a = 0, b = 0]) => a + b },
   subtract: { symbol: '-', arity: 2, evaluate: ([a = 0, b = 0]) => a - b },
   multiply: { symbol: '*', arity: 2, evaluate: ([a = 0, b = 0]) => a * b },
@@ -31,17 +33,18 @@ export const handlers = [
 
   http.get('/api/v1/operations', () =>
     HttpResponse.json({
-      operations: Object.entries(operations).map(([name, { symbol, arity }]) => ({
+      operations: OPERATIONS.map((name) => ({
         name,
-        symbol,
-        arity,
+        symbol: operations[name].symbol,
+        arity: operations[name].arity,
       })),
     }),
   ),
 
   http.post<{ operation: string }>('/api/v1/operations/:operation', async ({ params, request }) => {
-    const spec = operations[params.operation]
-    if (!spec) return apiError(404, 'unknown_operation', `unknown operation "${params.operation}"`)
+    const name = OPERATIONS.find((operation) => operation === params.operation)
+    if (!name) return apiError(404, 'unknown_operation', `unknown operation "${params.operation}"`)
+    const spec = operations[name]
 
     let body: unknown
     try {
@@ -54,10 +57,10 @@ export const handlers = [
     if (!isNumberArray(operands) || operands.length !== spec.arity) {
       return apiError(400, 'invalid_operand_count', `expected ${spec.arity} operands`)
     }
-    if (params.operation === 'divide' && operands[1] === 0) {
+    if (name === 'divide' && operands[1] === 0) {
       return apiError(422, 'division_by_zero', 'cannot divide by zero')
     }
-    if (params.operation === 'sqrt' && (operands[0] ?? 0) < 0) {
+    if (name === 'sqrt' && (operands[0] ?? 0) < 0) {
       return apiError(
         422,
         'negative_square_root',
@@ -69,6 +72,6 @@ export const handlers = [
     if (!Number.isFinite(result)) {
       return apiError(422, 'result_out_of_range', 'result is out of range')
     }
-    return HttpResponse.json({ operation: params.operation, operands, result })
+    return HttpResponse.json({ operation: name, operands, result })
   }),
 ]

@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
+import { CLIENT_ERROR_CODES, SERVER_ERROR_CODES } from '@/shared/api/httpClient'
+
 import en from './locales/en.json'
 import es from './locales/es.json'
 
@@ -39,6 +41,12 @@ describe('locales', () => {
   it('use the same interpolation variables in both languages', () => {
     for (const [key, message] of english) {
       expect(placeholders(spanish.get(key) ?? ''), key).toEqual(placeholders(message))
+    }
+  })
+
+  it('have a message for every API error code', () => {
+    for (const code of [...SERVER_ERROR_CODES, ...CLIENT_ERROR_CODES]) {
+      expect(english.has(`errors.${code}`), code).toBe(true)
     }
   })
 })
