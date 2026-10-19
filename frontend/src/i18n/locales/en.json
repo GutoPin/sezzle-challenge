@@ -32,14 +32,31 @@
       "equals": "Equals"
     },
     "expressions": {
-      "percentage": "{{percent}}% of {{base}}"
+      "percentage": "{{percent}}% of {{base}}",
+      "percentagePending": "{{percent}}% of"
+    },
+    "calculating": "Calculating…",
+    "retry": "Try again",
+    "result": "Result: {{value}}",
+    "shortcuts": {
+      "title": "Keyboard shortcuts",
+      "digits": "Digits and decimal point",
+      "operators": "Add, subtract, multiply, divide",
+      "power": "Power",
+      "percentage": "Percent of",
+      "sqrt": "Square root",
+      "toggleSign": "Toggle sign",
+      "equals": "Equals",
+      "backspace": "Delete last digit",
+      "clear": "Clear"
     }
   },
   "history": {
     "title": "History",
     "empty": "Your calculations will appear here.",
     "clear": "Clear history",
-    "reuse": "Use result {{result}}"
+    "reuse": "Use result {{result}}",
+    "description": "Select a result to use it in your next calculation."
   },
   "status": {
     "label": "API status",
@@ -59,6 +76,16 @@
     "network": "Can’t reach the API. Check your connection and try again.",
     "timeout": "The API took too long to answer. Try again.",
     "unknown": "Something went wrong. Try again.",
-    "max_digits": "Numbers can have up to {{max}} digits."
+    "max_digits": "Numbers can have up to {{max}} digits.",
+    "invalid_operand": "Values must be finite numbers.",
+    "not_found": "That address doesn’t exist on the API.",
+    "method_not_allowed": "The API doesn’t accept that kind of request.",
+    "undefined_result": "That has no real-number result.",
+    "internal_error": "The API hit an unexpected problem. Try again."
+  },
+  "hero": {
+    "eyebrow": "Calculator · Go API",
+    "title": "Arithmetic, worked out.",
+    "body": "Type on the keypad or your keyboard. Every result is calculated by a Go microservice and rounded to 15 significant digits, so 0.1 + 0.2 is simply 0.3."
   }
 }

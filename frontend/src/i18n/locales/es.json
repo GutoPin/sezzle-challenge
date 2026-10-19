@@ -32,14 +32,31 @@
       "equals": "Igual"
     },
     "expressions": {
-      "percentage": "{{percent}} % de {{base}}"
+      "percentage": "{{percent}} % de {{base}}",
+      "percentagePending": "{{percent}} % de"
+    },
+    "calculating": "Calculando…",
+    "retry": "Reintentar",
+    "result": "Resultado: {{value}}",
+    "shortcuts": {
+      "title": "Atajos de teclado",
+      "digits": "Dígitos y separador decimal",
+      "operators": "Sumar, restar, multiplicar, dividir",
+      "power": "Potencia",
+      "percentage": "Porcentaje de",
+      "sqrt": "Raíz cuadrada",
+      "toggleSign": "Cambiar el signo",
+      "equals": "Igual",
+      "backspace": "Borrar el último dígito",
+      "clear": "Borrar todo"
     }
   },
   "history": {
     "title": "Historial",
     "empty": "Aquí aparecerán tus cálculos.",
     "clear": "Borrar historial",
-    "reuse": "Usar el resultado {{result}}"
+    "reuse": "Usar el resultado {{result}}",
+    "description": "Elige un resultado para usarlo en tu próximo cálculo."
   },
   "status": {
     "label": "Estado de la API",
@@ -59,6 +76,16 @@
     "network": "No se puede conectar con la API. Revisa tu conexión e inténtalo de nuevo.",
     "timeout": "La API tardó demasiado en responder. Inténtalo de nuevo.",
     "unknown": "Algo salió mal. Inténtalo de nuevo.",
-    "max_digits": "Los números pueden tener hasta {{max}} dígitos."
+    "max_digits": "Los números pueden tener hasta {{max}} dígitos.",
+    "invalid_operand": "Los valores deben ser números finitos.",
+    "not_found": "Esa dirección no existe en la API.",
+    "method_not_allowed": "La API no acepta ese tipo de solicitud.",
+    "undefined_result": "Eso no tiene un resultado en los números reales.",
+    "internal_error": "La API tuvo un problema inesperado. Inténtalo de nuevo."
+  },
+  "hero": {
+    "eyebrow": "Calculadora · API en Go",
+    "title": "Aritmética, bien resuelta.",
+    "body": "Escribe con el teclado en pantalla o con el tuyo. Cada resultado lo calcula un microservicio en Go y se redondea a 15 cifras significativas, así que 0,1 + 0,2 da exactamente 0,3."
   }
 }

@@ -10,13 +10,18 @@ const ENDPOINT = '/api/v1/test'
 
 const STATUS_BY_CODE: Record<ServerErrorCode, number> = {
   invalid_json: 400,
-  invalid_operand_count: 400,
   unknown_field: 400,
+  invalid_operand_count: 400,
+  invalid_operand: 400,
   unknown_operation: 404,
+  not_found: 404,
+  method_not_allowed: 405,
   payload_too_large: 413,
   division_by_zero: 422,
   negative_square_root: 422,
+  undefined_result: 422,
   result_out_of_range: 422,
+  internal_error: 500,
 }
 
 function respondWith(resolver: Parameters<typeof http.all>[1]) {
