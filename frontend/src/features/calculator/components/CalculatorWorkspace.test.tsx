@@ -42,7 +42,7 @@ describe('CalculatorWorkspace', () => {
 
     await expectDisplay('15')
     expect(screen.getByLabelText('Display')).toHaveTextContent('12 + 3 =')
-    expect(screen.getByRole('status', { name: '' })).toHaveTextContent('Result: 15')
+    expect(screen.getByText('Result: 15')).toHaveRole('status')
   })
 
   it('chains operations and highlights the pending operator', async () => {
@@ -178,7 +178,20 @@ describe('CalculatorWorkspace', () => {
     await expectDisplay('5')
 
     await user.click(within(tape).getByRole('button', { name: 'Clear history' }))
+    expect(within(tape).getByRole('status')).toHaveTextContent('History cleared.')
+    expect(within(tape).getByRole('button', { name: 'Undo' })).toHaveFocus()
+
+    await user.click(within(tape).getByRole('button', { name: 'Undo' }))
+    expect(within(tape).getByRole('button', { name: 'Use result 2.5' })).toBeInTheDocument()
+    expect(within(tape).getByRole('button', { name: 'Clear history' })).toHaveFocus()
+  })
+
+  it('shows an empty tape until the first calculation', () => {
+    setup()
+
+    const tape = screen.getByRole('region', { name: 'History' })
     expect(within(tape).getByText('Your calculations will appear here.')).toBeInTheDocument()
+    expect(within(tape).queryByRole('button')).not.toBeInTheDocument()
   })
 
   it('formats numbers for the selected language', async () => {

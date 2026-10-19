@@ -79,6 +79,8 @@ export function CalculatorWorkspace({ intro }: CalculatorWorkspaceProps) {
             dispatch({ type: 'recall', value })
           }}
           onClear={history.clear}
+          canUndo={history.canUndoClear}
+          onUndo={history.undoClear}
         />
         <ShortcutList />
       </div>

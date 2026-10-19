@@ -56,6 +56,8 @@
     "title": "History",
     "empty": "Your calculations will appear here.",
     "clear": "Clear history",
+    "cleared": "History cleared.",
+    "undo": "Undo",
     "reuse": "Use result {{result}}",
     "description": "Select a result to use it in your next calculation."
   },

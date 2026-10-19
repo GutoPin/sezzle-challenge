@@ -44,9 +44,13 @@ function loadHistory(): HistoryEntry[] {
   }
 }
 
-/** Recent calculations, newest first, persisted in localStorage. */
+/**
+ * Recent calculations, newest first, persisted in localStorage. Clearing can
+ * be undone until the next calculation is added.
+ */
 export function useHistory() {
   const [entries, setEntries] = useState(loadHistory)
+  const [cleared, setCleared] = useState<HistoryEntry[] | null>(null)
 
   useEffect(() => {
     writeStorage(HISTORY_STORAGE_KEY, JSON.stringify(entries))
@@ -54,14 +58,21 @@ export function useHistory() {
 
   const add = useCallback((calculation: Calculation) => {
     const createdAt = Date.now()
+    setCleared(null)
     setEntries((previous) =>
       [{ ...calculation, id: createId(createdAt), createdAt }, ...previous].slice(0, HISTORY_LIMIT),
     )
   }, [])
 
   const clear = useCallback(() => {
+    setCleared(entries)
     setEntries([])
-  }, [])
+  }, [entries])
 
-  return { entries, add, clear }
+  const undoClear = useCallback(() => {
+    if (cleared) setEntries(cleared)
+    setCleared(null)
+  }, [cleared])
+
+  return { entries, add, clear, canUndoClear: cleared !== null, undoClear }
 }

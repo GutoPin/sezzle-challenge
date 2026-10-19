@@ -60,4 +60,41 @@ describe('useHistory', () => {
     expect(result.current.entries).toEqual([])
     expect(localStorage.getItem(HISTORY_STORAGE_KEY)).toBe('[]')
   })
+
+  it('brings back what the last clear removed', () => {
+    const { result } = renderHook(() => useHistory())
+    act(() => {
+      result.current.add(calculation)
+    })
+    const saved = result.current.entries
+
+    act(() => {
+      result.current.clear()
+    })
+    expect(result.current.canUndoClear).toBe(true)
+
+    act(() => {
+      result.current.undoClear()
+    })
+    expect(result.current.entries).toEqual(saved)
+    expect(result.current.canUndoClear).toBe(false)
+    expect(JSON.parse(localStorage.getItem(HISTORY_STORAGE_KEY) ?? '')).toHaveLength(1)
+  })
+
+  it('forgets cleared entries once a new calculation is added', () => {
+    const { result } = renderHook(() => useHistory())
+    act(() => {
+      result.current.add(calculation)
+    })
+    act(() => {
+      result.current.clear()
+    })
+
+    act(() => {
+      result.current.add({ ...calculation, result: 9 })
+    })
+
+    expect(result.current.canUndoClear).toBe(false)
+    expect(result.current.entries.map((entry) => entry.result)).toEqual([9])
+  })
 })
